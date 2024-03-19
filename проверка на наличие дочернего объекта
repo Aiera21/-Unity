@@ -1,0 +1,51 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class TothemScript : MonoBehaviour
+{
+    private InventoryScript inventoryPlayer;
+    public GameObject _symboles;
+
+    private void Start()
+    {
+        inventoryPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryScript>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+                for (int i = 0; i < inventoryPlayer.slots.Length; i++)
+                {
+                    if (inventoryPlayer.slots[i] != null)
+                    {
+                        if (CheckForWaterDropInChildren(inventoryPlayer.slots[i]))
+                        {
+                            if (_symboles != null)
+                            {
+                                inventoryPlayer.isFull[i] = false;
+                                _symboles.SetActive(true);
+                            }
+                        }
+                        
+                    }
+                        
+                }
+        }
+    }
+
+    bool CheckForWaterDropInChildren(GameObject slot)
+    {
+        foreach (Transform child in slot.transform)
+            {
+            if (child.CompareTag("WaterDrop"))
+                {
+                Destroy(child.gameObject);
+                return true; 
+                }
+            }
+        return false;
+    }
+}
